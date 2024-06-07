@@ -10,6 +10,7 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.interaction.HoverInteraction
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -39,12 +40,14 @@ import androidx.compose.ui.unit.dp
 import androidx.core.view.WindowCompat
 import androidx.core.view.WindowInsetsControllerCompat
 import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.navigation.NavController
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.onsevenine.tabletenniscounter.screens.HomeScreen
 import com.onsevenine.tabletenniscounter.screens.MatchPreferencesScreen
+import com.onsevenine.tabletenniscounter.screens.ResultScreen
 import com.onsevenine.tabletenniscounter.ui.Screen
 import com.onsevenine.tabletenniscounter.ui.theme.TableTennisCounterTheme
 
@@ -157,7 +160,10 @@ fun TableTennisCounterApp(
             modifier = modifier.padding(innerPadding)
         ) {
             composable(Screen.Home.name) {
-                HomeScreen(appViewModel = appViewModel)
+                HomeScreen(
+                    appViewModel = appViewModel,
+                    navController = navController,
+                )
             }
 
             composable(Screen.MatchPreferences.name) {
@@ -165,9 +171,19 @@ fun TableTennisCounterApp(
                     appViewModel = appViewModel,
                     onClickBack = {
                         appViewModel.updateScreen(Screen.Home.name)
-                        navController.popBackStack()
+                        navController.popBackStack(Screen.Home.name, false)
                     },
                     modifier = Modifier.padding(20.dp)
+                )
+            }
+
+            composable(Screen.Result.name) {
+                ResultScreen(
+                    navController = navController,
+                    appViewModel = appViewModel,
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .padding(20.dp)
                 )
             }
         }

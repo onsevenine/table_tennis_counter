@@ -6,7 +6,7 @@ data class AppState(
     val screen: String = Screen.Home.name,
     val matchStarted: Boolean = false,
     val noOfGames: Int = 1,
-    val gameNumber: Int = 1,
+    val gameNumber: Int = 0,
     val whoseServe: Int = 1,
     val namePlayer1: String = "Player 1",
     val namePlayer2: String = "Player 2",
@@ -15,4 +15,5 @@ data class AppState(
     val gamePoint: Int = 11,
     val deuce: Boolean = false,
     val matchOver: Boolean = false,
+    val gameResults: List<Int> = emptyList(),
 )

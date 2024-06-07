@@ -33,7 +33,7 @@ class AppViewModel : ViewModel() {
         _state.update { currentState ->
             currentState.copy(
                 noOfGames = 1,
-                gameNumber = 1,
+                gameNumber = 0,
                 whoseServe = 1,
                 point1 = 0,
                 point2 = 0,
@@ -107,9 +107,21 @@ class AppViewModel : ViewModel() {
 
         if (deuce) {
             if (
-                point1 >= gamePoint && (point1 - point2) == 2
-                || point2 >= gamePoint && (point2 - point1) == 2
+                point1 >= gamePoint && (point1 - point2) > 1
+                || point2 >= gamePoint && (point2 - point1) > 1
             ) {
+                /*Checking match finished TODO*/
+                if (point1 >= gamePoint && (point1 - point2) == 2) {
+                    pushGameWinner(1)
+                } else {
+                    pushGameWinner(2)
+                }
+                _state.update { currentState ->
+                    currentState.copy(
+                        gameNumber = currentState.gameNumber + 1
+                    )
+                }
+
                 restartGame()
                 return true
             }
@@ -118,6 +130,18 @@ class AppViewModel : ViewModel() {
         }
 
         if (point1 == gamePoint || point2 == gamePoint) {
+            /*Check who won the game TODO*/
+            if (point1 > point2) {
+                pushGameWinner(1)
+            } else {
+                pushGameWinner(2)
+            }
+
+            _state.update { currentState ->
+                currentState.copy(
+                    gameNumber = currentState.gameNumber + 1
+                )
+            }
             restartGame()
             return true
         }
@@ -130,5 +154,14 @@ class AppViewModel : ViewModel() {
         val gameNumber = _state.value.gameNumber
 
         return gameNumber == noOfGames
+    }
+
+    /*Test method to add wining results to the state*/
+    fun pushGameWinner(winner: Int) {
+        _state.update { currentState ->
+            currentState.copy(
+                gameResults = currentState.gameResults.plus(winner)
+            )
+        }
     }
 }

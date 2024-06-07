@@ -19,6 +19,7 @@ import com.onsevenine.tabletenniscounter.AppViewModel
 fun PlayerCard(
     playerNumber: Int,
     appViewModel: AppViewModel,
+    showResult: () -> Unit,
     modifier: Modifier = Modifier
 ) {
     val state by appViewModel.state.collectAsState()
@@ -30,8 +31,9 @@ fun PlayerCard(
                 // Score updated to +1
                 appViewModel.updateScore(playerNumber, 1)
                 if (appViewModel.checkGameOver(deuce = state.deuce)) {
-                    // Do something if game over not match
-                    /* TODO */
+                    if (appViewModel.checkMatchOver()) {
+                        showResult()
+                    }
                 }
             },
         contentAlignment = Alignment.Center
@@ -50,6 +52,7 @@ fun PlayerCard(
             Counter(score = if (playerNumber == 1) state.point1 else state.point2)
             PlayerId(
                 name = if (playerNumber == 1) state.namePlayer1 else state.namePlayer2,
+//                name = state.gameNumber.toString(),
                 country = "\uD83C\uDDEE\uD83C\uDDF3",
             )
         }
